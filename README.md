@@ -18,8 +18,10 @@
 
 ### Prerequisites
 
+- Jetnet (https://github.com/jet-net/JetNet.git) 
 - Python 3.x
-- Required Python libraries (list them here or refer to a requirements file)
+- Pytorch
+
 
 ### Installation
 
