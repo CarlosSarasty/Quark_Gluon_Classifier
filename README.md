@@ -1,1 +1,40 @@
-# Quark_Gluon_Classifier
+
+### Directories and Files
+
+- **README.md:** Project documentation and instructions.
+- **config/:** Configuration files for various setups.
+- **data/:** Directory containing data files.
+- **datasets/:** Scripts and utilities for handling datasets.
+- **evaluation/:** Evaluation scripts and results.
+- **figures/:** Generated figures and plots.
+- **launch_project.py:** Script to launch the project.
+- **models/:** Directory for model definitions and architectures.
+- **scripts/:** Miscellaneous scripts for different tasks.
+- **summary/:** Summaries and logs of training runs.
+- **trainers/:** Training scripts and utilities.
+- **utils/:** Utility functions and helpers.
+
+## Getting Started
+
+### Prerequisites
+
+- Python 3.x
+- Required Python libraries (list them here or refer to a requirements file)
+
+### Installation
+
+1. Clone the repository:
+    ```sh
+    git clone https://github.com/YOUR-USERNAME/Quark_Gluon_Classifier.git
+    ```
+2. Navigate to the project directory:
+    ```sh
+    cd Quark_Gluon_Classifier
+    ```
+
+### Usage
+
+To launch the project, run:
+```sh
+python launch_project.py config/config.yaml
+
