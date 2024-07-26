@@ -1,11 +1,12 @@
-
 import torch
 from sklearn.metrics import roc_curve, auc, confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 import yaml
 from utils.utils import load_checkpoint
 from models.get_model import get_model
+    
 
 def evaluate_and_plot(val_loader, checkpoint_path, save_dir, train_name):
     """
@@ -50,6 +51,12 @@ def evaluate_and_plot(val_loader, checkpoint_path, save_dir, train_name):
 
     # Confusion matrix
     conf_matrix = confusion_matrix(true_labels, predictions, normalize='true')
+
+
+    # Ensure save_dir exists 
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+
 
     # Save the confusion matrix
     conf_matrix_path = f'{save_dir}/confusion_matrix_{name}.pt'
