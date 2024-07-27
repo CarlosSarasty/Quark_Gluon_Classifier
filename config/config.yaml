@@ -1,5 +1,5 @@
 data:
-  file_path: 'path/to/your/data.csv'
+  file_path: 'datasets/jetnet/'
   test_size: 0.2
   random_state: 42
   data_args:
@@ -9,13 +9,13 @@ data:
     num_particles: 15                  # NUmber of particles in each jet max 150
     jet_features: ["type", "pt", "eta", "mass"]
    # 'num_jets': 100,               # Total number of jets
-    "download": True  # Automatic download
+   # "download": True  # Automatic download
 
 training:
   num_epochs: 50
   learning_rate: 0.01
   checkpoint_path: 'summary/best_model_15.pth'
-  device: 'cpu' 
+  device: 'cuda' 
   log_dir: 'summary'
 
 model:
