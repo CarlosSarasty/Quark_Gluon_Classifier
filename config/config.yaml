@@ -6,15 +6,15 @@ data:
     jet_type: ["g", "t"]  # gluon, top quark, and W boson jets
     data_dir: "datasets/jetnet"       # only selecting the kinematic features
     particle_features: ["etarel", "phirel", "ptrel"]
-    num_particles: 15                  # NUmber of particles in each jet max 150
+    num_particles: 120                  # NUmber of particles in each jet max 150
     jet_features: ["type", "pt", "eta", "mass"]
    # 'num_jets': 100,               # Total number of jets
-   # "download": True  # Automatic download
+    "download": True  # Automatic download
 
 training:
   num_epochs: 50
   learning_rate: 0.01
-  checkpoint_path: 'summary/best_model_15.pth'
+  checkpoint_path: 'summary/best_model_120.pth'
   device: 'cuda' 
   log_dir: 'summary'
 
@@ -23,6 +23,6 @@ model:
   model_type: 'BinaryClassifier_v2'  # Options: 'BinaryClassifier', 'BinaryClassifier_v2'
 
 inference:
-  train_name: 'BC_v2_15_particles'
-  checkpoint_path: 'summary/best_model_15.pth'
+  train_name: 'BC_v2_120_particles'
+  checkpoint_path: 'summary/best_model_120.pth'
   save_dir: 'figures'
