@@ -26,8 +26,11 @@ def train_model(model, train_loader, val_loader, **kwargs):
     learning_rate = kwargs.pop('learning_rate')
     checkpoint_path = kwargs.pop('checkpoint_path')
     log_dir = kwargs.pop('log_dir')
-    device = kwargs.pop('device')    
-
+    device = kwargs.pop('device')   
+    if device == 'cuda':
+        print(f'Device name: {torch.cuda.get_device_name(device)}')
+    else: 
+        print(f'Device {device}')
     # Initialize TensorBoard writer
     writer = SummaryWriter(log_dir=log_dir)
     
