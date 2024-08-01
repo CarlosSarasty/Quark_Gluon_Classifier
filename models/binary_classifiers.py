@@ -92,3 +92,21 @@ class BinaryClassifierResidual(nn.Module):
         # Output layer
         out = self.fc5(out)
         return torch.sigmoid(out)
+
+
+class QuarkGluonClassifierWithEmbeddings(nn.Module):
+    def __init__(self, num_particles, embedding_dim, jet_input_dim, hidden_dim, output_dim):
+        super(QuarkGluonClassifierWithEmbeddings, self).__init__()
+        self.embedding = nn.Linear(3, embedding_dim)  # Linear embedding for particle features
+        self.fc1 = nn.Linear(jet_input_dim + num_particles * embedding_dim, hidden_dim)
+        self.fc2 = nn.Linear(hidden_dim, output_dim)
+
+    def forward(self, jet_features, particle_features):
+        # Embed particle features
+        embedded_particles = self.embedding(particle_features)
+        embedded_particles = embedded_particles.view(embedded_particles.size(0), -1)  # Flatten the embeddings
+        # Concatenate jet features with particle embeddings
+        x = torch.cat((jet_features, embedded_particles), dim=1)
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
