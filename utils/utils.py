@@ -1,4 +1,3 @@
-
 import torch
 import yaml 
 import numpy as np
@@ -34,12 +33,12 @@ def save_checkpoint(model, optimizer, epoch, checkpoint_path):
    print(f"Checkpoint saved at {checkpoint_path}")
 
 
-def load_checkpoint(checkpoint_path):
+def load_checkpoint(config):
 
-   with open('config/config.yaml', 'r') as file:
-    config = yaml.safe_load(file)
+   #with open('config/config.yaml', 'r') as file:
+   # config = yaml.safe_load(file)
 
-   state = torch.load(checkpoint_path)
+   state = torch.load(checkpoint_path, weights_only=True)
    model = get_model(**config['model'])
    model.load_state_dict(state['model_state_dict'])
    #optimizer.load_state_dict(state['optimizer_state'])
