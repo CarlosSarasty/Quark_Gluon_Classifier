@@ -21,5 +21,9 @@ def get_model(**kwargs):
     elif model_type == 'BinaryClassifier_v2':
         print(' *** loading ', model_type, '***')
         return BinaryClassifier_v2(input_dim)
+    elif model_type == 'QuarkGluonClassifierWithEmbeddings':
+        print(' *** loading ', model_type, '***')
+        return QuarkGluonClassifierWithEmbeddings(num_particles, embedding_dim, jet_input_dim, hidden_dim, output_dim)
+    
     else:
         raise ValueError("Invalid model type specified. Choose 'BinaryClassifier' or 'BinaryClassifier_v2'.")
