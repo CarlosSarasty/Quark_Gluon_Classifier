@@ -23,7 +23,7 @@
 - Pytorch
 
 
-### Installation
+### Download
 
 1. Clone the repository:
     ```sh
