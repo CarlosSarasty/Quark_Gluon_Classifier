@@ -1,0 +1,30 @@
+data:
+  file_path: 'datasets/jetnet/'
+  test_size: 0.2
+  random_state: 42
+  data_args:
+    jet_type: ['g','q', 't', 'w', 'z'] 
+    data_dir: "datasets/jetnet"       # only selecting the kinematic features
+    particle_features: ["etarel", "phirel", "ptrel"]
+    num_particles: 120                  # NUmber of particles in each jet max 150
+    jet_features: ["type", "pt", "eta", "mass"]
+   # 'num_jets': 100,               # Total number of jets
+    "download": True  # Automatic download
+
+training:
+  num_epochs: 50
+  learning_rate: 0.01
+  checkpoint_path: 'summary/best_multiclass_model_120.pth'
+  device: 'cuda' 
+  log_dir: 'summary'
+
+model:
+  model_type: 'MulticlassClassifier' 
+  input_dim: 6
+  hidden_layers: [32,64] 
+  output_dim: 5 
+
+inference:
+  train_name: 'Multiclass'
+  checkpoint_path: 'summary/best_multiclass_model_120.pth'
+  save_dir: 'figures'
