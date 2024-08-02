@@ -19,12 +19,30 @@ def get_data_loaders(all_feats_df, data_args):
     '''
 
   feats = data_args['jet_features'][1:]+data_args['particle_features']
-
   y = all_feats_df['type'].values 
-  y_bin = np.where(y == 2, 1, 0) # using binary labels 0 and 1
+
+  if (len(data_args['jet_type']) > 2):
+      ## One hot encoding
+      # Ensure labels are integers
+      y = y.astype(int)
+
+      # Determine the number of unique classes
+      num_classes = np.max(y) + 1
+
+      # Initialize the ground truth matrix with zeros
+      ground_truth = np.zeros((y.size, num_classes))
+
+      # Set the appropriate indices to 1
+      ground_truth[np.arange(y.size), y] = 1
+     
+      X_train, X_test, y_train, y_test = train_test_split(all_feats_df[feats].values, ground_truth, test_size=0.2, random_state=42)
+
+      
+  else : #FIXME So far the labels are changed mannually for binary classifier.
+      y_bin = np.where(y == 2, 1, 0) # using binary labels 0 and 1
+      X_train, X_test, y_train, y_test = train_test_split(all_feats_df[feats].values, y_bin, test_size=0.2, random_state=42)
 
   # Split the data into training and testing sets
-  X_train, X_test, y_train, y_test = train_test_split(all_feats_df[feats].values, y_bin, test_size=0.2, random_state=42)
 
   # Scale the features
   scaler = StandardScaler()
