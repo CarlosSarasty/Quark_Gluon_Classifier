@@ -1,4 +1,5 @@
 from models.binary_classifiers import *
+from models.multiclass_classifier import *
 
 def get_model(**kwargs):
     '''
@@ -24,6 +25,10 @@ def get_model(**kwargs):
     elif model_type == 'QuarkGluonClassifierWithEmbeddings':
         print(' *** loading ', model_type, '***')
         return QuarkGluonClassifierWithEmbeddings(num_particles, embedding_dim, jet_input_dim, hidden_dim, output_dim)
+    elif model_type == 'MulticlassClassifier':
+        print(' *** loading ', model_type, '***')
+        return MulticlassClassifier(**kwargs)
+        #return MulticlassClassifier(input_dim=input_dim, hidden_layers=hidden_layers, output_dim=output_dim)
     
     else:
         raise ValueError("Invalid model type specified. Choose 'BinaryClassifier' or 'BinaryClassifier_v2'.")
