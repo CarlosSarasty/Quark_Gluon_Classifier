@@ -1,6 +1,7 @@
 from models.binary_classifiers import *
 from models.multiclass_classifier import *
-
+from models.autoencoder import *
+from models.residual_autoencoder import *
 def get_model(**kwargs):
     '''
     Initialize and return the model based on the specified type.
@@ -28,7 +29,15 @@ def get_model(**kwargs):
     elif model_type == 'MulticlassClassifier':
         print(' *** loading ', model_type, '***')
         return MulticlassClassifier(**kwargs)
-        #return MulticlassClassifier(input_dim=input_dim, hidden_layers=hidden_layers, output_dim=output_dim)
+    elif model_type == 'MulticlassClassifier_v2':
+        print(' *** loading ', model_type, '***')
+        return MulticlassClassifier_v2(**kwargs)
+    elif model_type == 'autoencoder':
+        print(' *** loading ', model_type, '***')
+        return TabularAutoencoder(**kwargs)
+    elif model_type == 'residual_autoencoder':
+        print(' *** loading ', model_type, '***')
+        return autoencoder(**kwargs)
     
     else:
         raise ValueError("Invalid model type specified. Choose 'BinaryClassifier' or 'BinaryClassifier_v2'.")
