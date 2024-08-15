@@ -2,6 +2,10 @@ from models.binary_classifiers import *
 from models.multiclass_classifier import *
 from models.autoencoder import *
 from models.residual_autoencoder import *
+from models.transformers import *
+from models.cnn import *
+
+
 def get_model(**kwargs):
     '''
     Initialize and return the model based on the specified type.
@@ -38,6 +42,11 @@ def get_model(**kwargs):
     elif model_type == 'residual_autoencoder':
         print(' *** loading ', model_type, '***')
         return autoencoder(**kwargs)
-    
+    elif model_type == 'transformer_classifier': 
+        print(' *** loading ', model_type, '***')
+        return TransformerClassifier(**kwargs)
+    elif model_type == 'simple_cnn': 
+        print(' *** loading ', model_type, '***')
+        return SimpleCNN(**kwargs)
     else:
         raise ValueError("Invalid model type specified. Choose 'BinaryClassifier' or 'BinaryClassifier_v2'.")
