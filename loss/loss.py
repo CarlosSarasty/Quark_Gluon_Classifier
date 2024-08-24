@@ -1,32 +1,31 @@
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
 
-class FocalLoss(nn.Module):
-    def __init__(self, alpha=1, gamma=2, reduction='mean'):
-        """
-        :param alpha: Weighting factor in range (0,1) to balance the importance of positive vs negative examples.
-        :param gamma: Focusing parameter for modulating factor (1-p).
-        :param reduction: 'none' | 'mean' | 'sum'. Specifies the reduction to apply to the output.
-        """
-        super(FocalLoss, self).__init__()
-        self.alpha = alpha
-        self.gamma = gamma
-        self.reduction = reduction
+def emd2_loss(pred, true, reduction='mean'):
+    """
+    Calculate the EMD^2 loss between the true labels and predicted probabilities.
 
-    def forward(self, inputs, targets):
-        # Compute the cross entropy loss
-        BCE_loss = F.binary_cross_entropy_with_logits(inputs, targets, reduction='none')
+    Args:
+    - pred (torch.Tensor): A tensor of shape (N, C) representing the predicted probabilities 
+                        for each class. N is the number of events, and C is the number of classes.
+    - true (torch.Tensor): A tensor of shape (N, C) representing the true labels in one-hot 
+                        encoded format. N is the number of events, and C is the number of classes.
+    - reduction (str, optional):  Specifies the reduction to apply to the output: 'none' | 'mean' | 'sum'.
+                        'none': no reduction will be applied, 'mean': the weighted mean of the output is taken, 
+                        'sum': the output will be summed.
 
-        # Compute the pt factor, which is just the probability of the target class
-        pt = torch.exp(-BCE_loss)
+    Returns:
+    - emd2_loss (float): The EMD^2 loss.
+    """
+    # Calculate the cumulative distribution functions (CDFs) for both true labels and predictions
+    _ct = torch.cumsum(true, dim=1)
+    _cp = torch.cumsum(pred, dim=1)
 
-        # Compute the focal loss
-        F_loss = self.alpha * (1 - pt) ** self.gamma * BCE_loss
+    # Calculate the squared difference between the true and predicted CDFs
+    squared_diff = (_ct - _cp) ** 2
 
-        if self.reduction == 'mean':
-            return torch.mean(F_loss)
-        elif self.reduction == 'sum':
-            return torch.sum(F_loss)
-        else:
-            return F_loss
+    # Sum over classes and take the mean over all events
+    if  reduction == 'mean': 
+        emd2_loss = torch.sum(squared_diff, dim=1).mean()
+    else:
+        emd2_loss = torch.sum(squared_diff, dim=1)
+    return emd2_loss

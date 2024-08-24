@@ -13,18 +13,24 @@ data:
 
 training:
   num_epochs: 50
-  learning_rate: 0.01
-  checkpoint_path: 'summary/best_multiclass_model_120.pth'
+  #learning_rate: 0.01
+  learning_rate: 0.1
+  checkpoint_path: 'summary/best_multiclass_model_120_autoencoder.pth'
   device: 'cuda' 
-  log_dir: 'summary'
+  log_dir: 'test'
+  images: True
+
+loss:
+  loss_function: 'CrossEntropyLoss'
+
 
 model:
-  model_type: 'MulticlassClassifier' 
+  model_type: 'residual_autoencoder' 
   input_dim: 6
-  hidden_layers: [32,64] 
   output_dim: 5 
+  layers: [128,64,32,64,128] 
 
 inference:
-  train_name: 'Multiclass'
-  checkpoint_path: 'summary/best_multiclass_model_120.pth'
+  train_name: 'multiclass_residual_autoencoder'
+  checkpoint_path: 'summary/best_multiclass_model_120_res_autoencoder.pth'
   save_dir: 'figures'
