@@ -35,14 +35,15 @@ def get_data_loaders(all_feats_df, data_args):
       # Set the appropriate indices to 1
       ground_truth[np.arange(y.size), y] = 1
      
+      # Split the data into training and testing sets
       X_train, X_test, y_train, y_test = train_test_split(all_feats_df[feats].values, ground_truth, test_size=0.2, random_state=42)
 
       
   else : #FIXME So far the labels are changed mannually for binary classifier.
-      y_bin = np.where(y == 2, 1, 0) # using binary labels 0 and 1
+      y_bin = np.where(y == 2, 1, y) # using binary labels 0 and 1
+      # Split the data into training and testing sets
       X_train, X_test, y_train, y_test = train_test_split(all_feats_df[feats].values, y_bin, test_size=0.2, random_state=42)
 
-  # Split the data into training and testing sets
 
   # Scale the features
   scaler = StandardScaler()
@@ -51,7 +52,7 @@ def get_data_loaders(all_feats_df, data_args):
 
 
   # Create the dataset and data loader
-  batch_size = 100
+  batch_size = 50
   train_dataset = CustomDataset(X_train_scaled, y_train)
   train_loader = DataLoader(train_dataset , batch_size=batch_size, shuffle=True)
 

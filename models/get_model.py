@@ -4,7 +4,7 @@ from models.autoencoder import *
 from models.residual_autoencoder import *
 from models.transformers import *
 from models.cnn import *
-
+from models.uresnet import *
 
 def get_model(**kwargs):
     '''
@@ -48,5 +48,8 @@ def get_model(**kwargs):
     elif model_type == 'simple_cnn': 
         print(' *** loading ', model_type, '***')
         return SimpleCNN(**kwargs)
+    elif model_type == 'uresnet': 
+        print(' *** loading ', model_type, '***')
+        return UResNet(**kwargs)
     else:
         raise ValueError("Invalid model type specified. Choose 'BinaryClassifier' or 'BinaryClassifier_v2'.")

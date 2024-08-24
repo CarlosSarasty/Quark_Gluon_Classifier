@@ -5,7 +5,6 @@ import torch.nn.functional as F
 
 class SimpleCNN(nn.Module):
     def __init__(self, model_type, input_dim, num_classes):
-    def __init__(self, num_classes):
         super(SimpleCNN, self).__init__()
         # First convolutional layer: input channels = 1, output channels = 16, kernel size = 3x3
         self.conv1 = nn.Conv2d(in_channels=input_dim, out_channels=16, kernel_size=3, padding=1)
