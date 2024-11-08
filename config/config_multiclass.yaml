@@ -6,31 +6,29 @@ data:
     jet_type: ['g','q', 't', 'w', 'z'] 
     data_dir: "datasets/jetnet"       # only selecting the kinematic features
     particle_features: ["etarel", "phirel", "ptrel"]
-    num_particles: 120                  # NUmber of particles in each jet max 150
+    num_particles: 30                  # NUmber of particles in each jet max 150
     jet_features: ["type", "pt", "eta", "mass"]
    # 'num_jets': 100,               # Total number of jets
     "download": True  # Automatic download
 
 training:
   num_epochs: 50
-  #learning_rate: 0.01
-  learning_rate: 0.1
-  checkpoint_path: 'summary/best_multiclass_model_120_autoencoder.pth'
+  learning_rate: 0.01
+  checkpoint_path: 'summary/best_uresnet_emd2.pth'
   device: 'cuda' 
-  log_dir: 'test'
+  log_dir: 'test3'
   images: True
 
 loss:
-  loss_function: 'CrossEntropyLoss'
+  loss_function: 'emd2_loss'
 
 
 model:
-  model_type: 'residual_autoencoder' 
-  input_dim: 6
-  output_dim: 5 
-  layers: [128,64,32,64,128] 
+  model_type: 'uresnet' 
+  input_dim: 1
+  num_classes: 5 
 
 inference:
-  train_name: 'multiclass_residual_autoencoder'
-  checkpoint_path: 'summary/best_multiclass_model_120_res_autoencoder.pth'
+  train_name: 'uresnet'
+  checkpoint_path: 'summary/best_uresnet_emd2.pth'
   save_dir: 'figures'
