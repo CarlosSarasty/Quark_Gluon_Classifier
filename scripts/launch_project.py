@@ -12,7 +12,6 @@ import yaml
 import argparse
 import JetNet
 # import QuarkGluon  # Uncomment if you use QuarkGluon instead of JetNet
-from your_model_file import get_dataframes, get_data_loaders, get_model, train_model, plot_metrics, evaluate_and_plot
 
 def launch_project(config_file):
     # Load configuration from YAML file
@@ -41,7 +40,7 @@ def launch_project(config_file):
 
     # Plot metrics
     num_epochs = len(history['train_losses'])
-    plot_metrics(history, num_epochs)  # '/content/drive/MyDrive/Project/Loss_Accuracy.png')
+    plot_metrics(history, num_epochs)  
 
     # Evaluate the model
     # model_path = config['inference']['model_path']

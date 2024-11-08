@@ -6,6 +6,7 @@ import os
 import yaml
 from utils.utils import load_checkpoint
 from models.get_model import get_model
+from data.get_loaders import get_loaders
     
 
 def evaluate_and_plot(val_loader, checkpoint_path, save_dir, train_name):
@@ -23,10 +24,13 @@ def evaluate_and_plot(val_loader, checkpoint_path, save_dir, train_name):
       config = yaml.safe_load(file)
 
     name = config['inference']['train_name']
- 
-    checkpoint = torch.load(config['inference']['checkpoint_path'])
+
+    device = config['training']['device']
+    print( device)
+    checkpoint = torch.load(config['inference']['checkpoint_path'], map_location=torch.device(device))
     model = get_model(**config['model'])
     model.load_state_dict(checkpoint['model_state_dict'])   
+    model.to(device)
     model.eval()
 
 
