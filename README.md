@@ -19,8 +19,8 @@
 ### Prerequisites
 
 - Jetnet (https://github.com/jet-net/JetNet.git) 
-- Python 3.x
-- Pytorch
+- Python 3.10
+- Pytorch 2.4.1
 
 
 ### Download

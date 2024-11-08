@@ -3,12 +3,13 @@ import torch
 from tqdm import tqdm
 import torch.nn as nn
 import torch.optim as optim
+from jetnet.utils import to_image
 from utils.utils import save_checkpoint
 from torch.nn.functional import softmax
 from torch.utils.tensorboard import SummaryWriter
 from metrics.classification import ClassificationMetrics
 from torch.optim.lr_scheduler import StepLR
-
+from loss import get_loss
 
 def log_metrics_to_tensorboard(metrics_dict, writer, epoch):
     for metric_name, metric_values in metrics_dict.items():
@@ -42,6 +43,7 @@ def train_model(model, train_loader, val_loader, jet_type, **kwargs):
         print(f'Device name: {torch.cuda.get_device_name(device)}')
     else: 
         print(f'Device {device}')
+
     # Initialize TensorBoard writer
     writer = SummaryWriter(log_dir=log_dir)
     
@@ -59,18 +61,17 @@ def train_model(model, train_loader, val_loader, jet_type, **kwargs):
     writer = SummaryWriter(log_dir=log_dir)
 
     # Initialize the scheduler 
-    scheduler = StepLR(optimizer, step_size=5, gamma=0.1)
+    scheduler = StepLR(optimizer, step_size=10, gamma=0.1)
 
-    im_size = 25
+    im_size = 32
     maxR = 0.4
 
     for epoch in range(num_epochs):
         metrics.new_epoch()
         model.train()
         train_loss = 0.0
-        #correct_train = 0
-        #total_train = 0
-    
+        total_train = 0
+   
         for inputs, labels in tqdm(train_loader, desc=f'Epoch {epoch+1}/{num_epochs} - Training'):
             if images:
                 inputs = to_image(inputs,  im_size = im_size, maxR = maxR)
@@ -79,14 +80,20 @@ def train_model(model, train_loader, val_loader, jet_type, **kwargs):
             inputs, labels = inputs.to(device), labels.to(device)
             outputs = model(inputs.float())
             loss = criterion(outputs, labels.float())
+            train_loss += loss.item() * inputs.size(0)
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
             batch_metric = metrics.train_batch_metrics(outputs, labels)
+            total_train += labels.size(0)
         
-            # Log batch metrics to TensorBoard
-            #for metric_name, metric_value in batch_metric.items():
-            #    writer.add_scalar(f'Train/{metric_name}', metric_value, epoch)
+        # Calculate and log training loss
+        train_loss = train_loss / total_train
+
+        # Print the training loss
+        print(f"Epoch [{epoch+1}/{num_epochs}], Train Loss: {train_loss:.4f}")
+
+
         scheduler.step() 
         val_loss = 0.0
         total_val = 0.0
@@ -103,10 +110,17 @@ def train_model(model, train_loader, val_loader, jet_type, **kwargs):
                 valid_batch_metric = metrics.valid_batch_metrics(outputs, labels)
                 total_val += labels.size(0)
 
-            # Log validation batch metrics to TensorBoard
-            #for metric_name, metric_value in valid_batch_metric.items():
-            #        writer.add_scalar(f'Validation/{metric_name}', metric_value, epoch)
+        
+        # Calculate and log validation loss
         _val = val_loss/total_val 
+        dic_loss = {'Loss/Train': train_loss, 'Loss/Valid': _val }
+        writer.add_scalars('Loss', dic_loss, epoch)
+        
+        # Print the validation loss
+        print(f"Epoch [{epoch+1}/{num_epochs}], Validation Loss: {_val:.4f}")
+        print(f"Epoch [{epoch+1}/{num_epochs}], Learning Rate: {scheduler.get_last_lr()[0]}")
+       
+        # Print the current learning rate
         if _val  < best_val_loss:
             best_val_loss = _val
             save_checkpoint(model, optimizer, epoch, checkpoint_path)
@@ -115,10 +129,7 @@ def train_model(model, train_loader, val_loader, jet_type, **kwargs):
     
         final_result = metrics.epoch_metrics()
         log_metrics_to_tensorboard(final_result, writer, epoch=epoch)
-        print(final_result)
-        # Log metrics per epoch to TensoBoard
-        #for metric_name, metric_value in final_result.items():
-        #    writer.add_scalar(f'Epoch/{metric_name}', metric_value, epoch)
+        writer.add_scalar('Learning rate', scheduler.get_last_lr()[0], epoch)
 
     writer.close()
                

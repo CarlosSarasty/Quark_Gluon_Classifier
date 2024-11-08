@@ -5,8 +5,9 @@ from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 from utils.utils import save_checkpoint
 import time
+from torch.optim.lr_scheduler import StepLR
 
-def train_model(model, train_loader, val_loader, **kwargs):
+def train_model(model, train_loader, val_loader, weights=None, **kwargs):
     '''
     Train the model with the given data loaders and configuration.
 
@@ -57,7 +58,7 @@ def train_model(model, train_loader, val_loader, **kwargs):
         for inputs, labels in tqdm(train_loader, desc=f'Epoch {epoch+1}/{num_epochs} - Training'):
             inputs, labels = inputs.to(device), labels.to(device)
             outputs = model(inputs.float())
-            loss = criterion(outputs.squeeze(), labels.float())
+            loss = criterion(outputs.squeeze(), labels.float(), weights = weights)
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()

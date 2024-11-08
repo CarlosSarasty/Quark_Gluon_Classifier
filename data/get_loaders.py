@@ -17,7 +17,7 @@ def get_loaders(particle_data, jet_data):
     train_dataset = TensorDataset(torch.tensor(X_train, dtype= torch.float32 ), torch.tensor(y_train, dtype=torch.long))
     test_dataset = TensorDataset(torch.tensor(X_test, dtype= torch.float32 ), torch.tensor(y_test, dtype=torch.long))
     
-    batch_size = 100
+    batch_size = 50
     train_loader = DataLoader(train_dataset , batch_size=batch_size, shuffle=True)
     
     val_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
