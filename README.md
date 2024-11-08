@@ -3,7 +3,7 @@
 
 - **README.md:** Project documentation and instructions.
 - **config/:** Configuration files for various setups.
-- **data/:** DScripts and utilities for handling datasets.
+- **data/:** Scripts and utilities for handling datasets.
 - **evaluation/:** Evaluation scripts and results.
 - **figures/:** Generated figures and plots.
 - **launch_project.py:** Script to launch the project.
